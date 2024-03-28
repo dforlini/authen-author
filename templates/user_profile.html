@@ -1,0 +1,40 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ user.username }}'s Profile</h2>
+    <p>Email: {{ user.email }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+    
+    <hr>
+
+    <h3>Feedback</h3>
+    {% if feedbacks %}
+        <ul class="list-group mb-3">
+            {% for feedback in feedbacks %}
+                <li class="list-group-item">
+                    <strong>{{ feedback.title }}</strong>
+                    <p>{{ feedback.content }}</p>
+                    <a href="{{ url_for('update_feedback', feedback_id=feedback.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+                    <form action="{{ url_for('delete_feedback', feedback_id=feedback.id) }}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No feedback yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('add_feedback', username=user.username) }}" class="btn btn-primary">Add Feedback</a>
+
+    <hr>
+
+    <form action="{{ url_for('delete_user', username=user.username) }}" method="post">
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+    </form>
+</div>
+{% endblock %}
